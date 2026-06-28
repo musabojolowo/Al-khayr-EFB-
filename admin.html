@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Al-Khayr EFB Tournament - Admin</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .admin-navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 10%;
+            background: #071426;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .admin-navbar h2 {
+            color: var(--primary);
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .admin-user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #ddd;
+        }
+
+        .logout-btn {
+            padding: 8px 16px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(180deg, #071426, #0b1d36);
+        }
+
+        .login-box {
+            background: var(--card);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 168, 255, 0.25);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-box h1 {
+            color: var(--primary);
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 28px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #081727;
+            color: white;
+            font-size: 16px;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #0099ff, #00d4ff);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .login-box button:hover {
+            transform: scale(1.02);
+        }
+
+        .login-error {
+            color: #e74c3c;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(231, 76, 60, 0.1);
+            border-radius: 5px;
+            display: none;
+        }
+
+        .admin-content {
+            display: none;
+        }
+
+        .admin-content.active {
+            display: block;
+        }
+
+        .result-form-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 2fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .result-form-grid input,
+        .result-form-grid select,
+        .result-form-grid button {
+            padding: 12px;
+        }
+
+        @media (max-width: 900px) {
+            .result-form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .success-message {
+            background: rgba(46, 204, 113, 0.1);
+            color: #2ecc71;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+    </style>
+
+</head>
+<body>
+
+<!-- Login Screen -->
+<div id="loginContainer" class="login-container">
+    <div class="login-box">
+        <h1>Admin Login</h1>
+        <div id="loginError" class="login-error"></div>
+        <input 
+            type="email" 
+            id="loginEmail" 
+            placeholder="Email" 
+            autocomplete="email">
+        <input 
+            type="password" 
+            id="loginPassword" 
+            placeholder="Password" 
+            autocomplete="current-password">
+        <button id="loginButton">Login</button>
+    </div>
+</div>
+
+<!-- Admin Dashboard -->
+<div id="adminContent" class="admin-content">
+
+    <!-- Admin Navbar -->
+    <div class="admin-navbar">
+        <h2><i class="fa-solid fa-shield"></i> Tournament Admin</h2>
+        <div class="admin-user-info">
+            <span id="adminEmail">Admin</span>
+            <button id="logoutButton" class="logout-btn">Logout</button>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <i class="fa-solid fa-trophy"></i>
+            Al-Khayr EFB Tournament
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="hero">
+        <h1>TOURNAMENT MANAGEMENT</h1>
+        <p>Manage brackets, submit results, and track progress</p>
+    </header>
+
+    <!-- Success Message -->
+    <div id="successMessage" class="card success-message" style="width: 92%; margin: 20px auto;">
+        <span id="successText"></span>
+    </div>
+
+    <!-- Tournament Setup -->
+    <section class="card">
+        <h2><i class="fa-solid fa-cogs"></i> Tournament Setup</h2>
+        
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 10px; color: var(--primary); font-weight: 600;">
+                Countdown Date & Time:
+            </label>
+            <input 
+                type="datetime-local" 
+                id="countdownDateTime"
+                style="width: 100%; padding: 12px; border-radius: 8px; border: none; background: #081727; color: white; font-size: 16px;">
+        </div>
+
+        <textarea
+            id="teamInput"
+            rows="15"
+            placeholder="Enter exactly 32 team names, one per line"
+            style="margin-bottom: 15px;"></textarea>
+
+        <button id="generateTournamentButton" style="width: 100%; margin-bottom: 10px;">
+            <i class="fa-solid fa-play"></i> Generate Tournament
+        </button>
+
+        <button id="resetTournamentButton" style="width: 100%; background: #e74c3c;">
+            <i class="fa-solid fa-rotate"></i> Reset Tournament
+        </button>
+    </section>
+
+    <!-- Statistics -->
+    <section class="card">
+        <h2><i class="fa-solid fa-chart-bar"></i> Tournament Statistics</h2>
+
+        <div class="stats">
+            <div class="stat">
+                <h3 id="adminTeamCount">0</h3>
+                <p>Teams</p>
+            </div>
+
+            <div class="stat">
+                <h3 id="adminMatchCount">0</h3>
+                <p>Matches Played</p>
+            </div>
+
+            <div class="stat">
+                <h3 id="adminRemainingTeams">0</h3>
+                <p>Remaining</p>
+            </div>
+
+            <div class="stat">
+                <h3 id="adminCurrentRound">-</h3>
+                <p>Current Round</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Result Submission -->
+    <section class="card">
+        <h2><i class="fa-solid fa-keyboard"></i> Submit Match Result</h2>
+
+        <div class="result-form-grid">
+            <select id="adminMatchSelect" placeholder="Select Match">
+                <option value="">Select Match...</option>
+            </select>
+            <input 
+                type="number" 
+                id="adminScore1" 
+                placeholder="Team 1 Score"
+                min="0">
+            <input 
+                type="number" 
+                id="adminScore2" 
+                placeholder="Team 2 Score"
+                min="0">
+            <button id="submitResultButton">
+                <i class="fa-solid fa-check"></i> Submit Result
+            </button>
+        </div>
+    </section>
+
+    <!-- Bracket -->
+    <section class="card">
+        <h2><i class="fa-solid fa-sitemap"></i> Tournament Bracket</h2>
+
+        <div class="bracket">
+            <div class="round">
+                <h3>Round of 32</h3>
+                <div id="adminRound32"></div>
+            </div>
+
+            <div class="round">
+                <h3>Round of 16</h3>
+                <div id="adminRound16"></div>
+            </div>
+
+            <div class="round">
+                <h3>Quarter Finals</h3>
+                <div id="adminQuarter"></div>
+            </div>
+
+            <div class="round">
+                <h3>Semi Finals</h3>
+                <div id="adminSemi"></div>
+            </div>
+
+            <div class="round">
+                <h3>Final</h3>
+                <div id="adminFinal"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Match Schedule -->
+    <section class="card">
+        <h2><i class="fa-solid fa-calendar"></i> Match Schedule</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Match</th>
+                    <th>Team 1</th>
+                    <th>Team 2</th>
+                    <th>Score</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="adminScheduleTable">
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Champion -->
+    <section class="champion-card">
+        <h2><i class="fa-solid fa-crown"></i> Champion</h2>
+        <div id="adminChampion">No Champion Yet</div>
+    </section>
+
+    <footer>
+        Made with ❤️ for Al-Khayr EFB Tournament | Admin Panel
+    </footer>
+
+</div>
+
+<script type="module" src="admin.js"></script>
+
+</body>
+</html>
