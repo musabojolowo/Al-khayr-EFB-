@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Al-Khayr EFB Tournament</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet"/>
+<link href="style.css" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav id="mainNav">
+    <div class="logo">
+        <i class="fa-solid fa-trophy"></i>
+        Al-Khayr EFB Tournament
+    </div>
+    <div class="nav-actions">
+        <button id="screenshotModeBtn" class="screenshot-btn">📸 Screenshot Mode</button>
+        <a class="register-btn" href="https://chat.whatsapp.com/Lq0BbjaH0G91cwpTk1JY3c" target="_blank">
+            📲 Join Group
+        </a>
+    </div>
+</nav>
+
+<!-- HERO / COUNTDOWN -->
+<header class="hero">
+    <h1>AL-KHAYR EFB TOURNAMENT</h1>
+    <p>20-team League · Top 8 Knockout · Single Round Robin</p>
+    <div id="countdown">Loading Countdown…</div>
+</header>
+
+<!-- PRIZE POOL -->
+<section class="card prizes-card hide-in-screenshot">
+    <h2>🏆 Prize Pool</h2>
+    <div class="prizes">
+        <div class="prize first">🥇 Champion<br/>₦7,000</div>
+        <div class="prize second">🥈 Runner-up<br/>₦3,000</div>
+    </div>
+</section>
+
+<!-- OVERVIEW STATS -->
+<section class="card overview-grid">
+    <div class="stat-card"><h3 id="teamCount">0</h3><p>Teams</p></div>
+    <div class="stat-card"><h3 id="matchCount">0</h3><p>Total Matches</p></div>
+    <div class="stat-card"><h3 id="completedCount">0</h3><p>Completed</p></div>
+    <div class="stat-card"><h3 id="stageDisplay">League</h3><p>Current Stage</p></div>
+</section>
+
+<!-- LEAGUE TABLE -->
+<section class="card" id="leagueTableSection">
+    <div class="section-header">
+        <h2>🏟 League Table</h2>
+        <button class="download-btn hide-in-screenshot" id="downloadTableBtn">
+            <i class="fa-solid fa-download"></i> Download Table
+        </button>
+    </div>
+    <div id="leagueTable"></div>
+</section>
+
+<!-- MATCHDAY FIXTURES -->
+<section class="card" id="matchdaySection">
+    <div class="section-header">
+        <h2>📅 Matchday Fixtures</h2>
+        <button class="download-btn hide-in-screenshot" id="downloadMatchdayBtn">
+            <i class="fa-solid fa-download"></i> Download
+        </button>
+    </div>
+    <div class="matchday-tabs" id="matchdayTabs"></div>
+    <div class="matchday-panels" id="matchdays"></div>
+</section>
+
+<!-- STATISTICS -->
+<section class="card" id="statisticsSection">
+    <h2>📊 Statistics</h2>
+    <div id="statsSection"></div>
+</section>
+
+<!-- KNOCKOUT BRACKET -->
+<section class="card" id="knockoutSection">
+    <div class="section-header">
+        <h2>🧾 Knockout Bracket</h2>
+        <button class="download-btn hide-in-screenshot" id="downloadKnockoutBtn">
+            <i class="fa-solid fa-download"></i> Download
+        </button>
+    </div>
+    <div class="knockout-bracket" id="knockoutBracket"></div>
+</section>
+
+<!-- CHAMPION -->
+<section class="champion-card" id="championSection">
+    <h2>🏆 Champion</h2>
+    <img id="championLogo" src="" alt="Champion Logo" class="champion-logo" style="display:none;">
+    <div class="champion-value" id="champion">No champion yet</div>
+    <button class="download-btn hide-in-screenshot" id="downloadBtn">
+        <i class="fa-solid fa-download"></i> Download
+    </button>
+</section>
+
+<!-- RULES (hidden in screenshot mode) -->
+<section class="card hide-in-screenshot">
+    <h2>🏆 Tournament Rules</h2>
+    <h3>1. Tournament Format</h3>
+    <ul>
+        <li>20 Teams – Single Round Robin League (19 matchdays, 190 total matches)</li>
+        <li>Top 8 teams qualify for the Knockout Stage.</li>
+    </ul>
+    <h3>2. League Points</h3>
+    <ul>
+        <li>Win = 3 Points · Draw = 1 Point · Loss = 0 Points</li>
+        <li>Ranking: Points → Goal Difference → Goals Scored</li>
+    </ul>
+    <h3>3. Knockout Stage</h3>
+    <ul>
+        <li>Quarter-finals: 1st vs 8th, 2nd vs 7th, 3rd vs 6th, 4th vs 5th</li>
+        <li>Semi-finals → Final</li>
+        <li>Drawn knockout matches: Extra Time → Penalty Shoot-out</li>
+    </ul>
+    <h3>4. Match Settings</h3>
+    <ul>
+        <li>Duration: <strong>8 Minutes</strong> · Extra Time: ON · Penalties: ON</li>
+        <li>Substitutions: 6 · Injuries: OFF</li>
+    </ul>
+    <h3>5. Disconnection Rules</h3>
+    <ul>
+        <li>Disconnect within first 4 minutes → replay.</li>
+        <li>Intentional disconnect while losing → 3–0 loss.</li>
+    </ul>
+    <h3>6. Registration</h3>
+    <ul>
+        <li>Entry Fee: ₦500 · Champion: ₦7,000 · Runner-up: ₦3,000</li>
+    </ul>
+    <p style="text-align:center;font-style:italic;margin-top:20px;">May the best player lift the Al-Khayr EFB Trophy! 🏆</p>
+</section>
+
+<!-- TEAM MODAL -->
+<div class="modal" id="teamModal" style="display:none;">
+    <div class="modal-content">
+        <button class="modal-close" id="teamModalClose">×</button>
+        <div class="team-profile">
+            <div class="team-logo" id="modalTeamLogo"></div>
+            <h3 id="modalTeamName">Team Name</h3>
+            <div class="team-stats" id="modalTeamStats"></div>
+        </div>
+    </div>
+</div>
+
+<footer>Made with ❤️ for Al-Khayr EFB Tournament</footer>
+
+<!-- html2canvas for screenshots -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="script.js" type="module"></script>
+</body>
+</html>

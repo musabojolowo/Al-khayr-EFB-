@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Al-Khayr EFB – Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ── LOGIN ──────────────────────────────────────────────────────────────── -->
+<div id="loginContainer" class="login-container">
+    <div class="login-box">
+        <h1><i class="fa-solid fa-shield"></i> Admin Login</h1>
+        <div id="loginError" class="login-error"></div>
+        <input type="email"    id="loginEmail"    placeholder="Email"    autocomplete="email">
+        <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
+        <button id="loginButton"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
+    </div>
+</div>
+
+<!-- ── ADMIN DASHBOARD ────────────────────────────────────────────────────── -->
+<div id="adminContent" class="admin-content">
+
+    <!-- Top bar -->
+    <div class="admin-navbar">
+        <h2><i class="fa-solid fa-shield"></i> Tournament Admin</h2>
+        <div class="admin-user-info">
+            <span id="adminEmail">Admin</span>
+            <button id="logoutButton" class="logout-btn">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </button>
+        </div>
+    </div>
+
+    <nav>
+        <div class="logo"><i class="fa-solid fa-trophy"></i> Al-Khayr EFB Tournament</div>
+    </nav>
+
+    <header class="hero">
+        <h1>TOURNAMENT MANAGEMENT</h1>
+        <p>Generate league · submit results · start knockout · declare champion</p>
+    </header>
+
+    <!-- Success / loading feedback -->
+    <div id="successMessage" class="card success-message" style="width:92%;margin:20px auto;display:none;">
+        <span id="successText"></span>
+    </div>
+    <div id="loadingOverlay" class="loading-overlay" style="display:none;">
+        <div class="loading-box">
+            <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+            <p id="loadingMessage">Please wait…</p>
+        </div>
+    </div>
+
+    <!-- ── TOURNAMENT SETUP ─────────────────────────────────────────────── -->
+    <section class="card">
+        <h2><i class="fa-solid fa-cogs"></i> Tournament Setup</h2>
+
+        <label class="field-label">Countdown Date &amp; Time:</label>
+        <input type="datetime-local" id="countdownDateTime" class="admin-input">
+
+        <label class="field-label" style="margin-top:18px;">Team Names (exactly 20, one per line):</label>
+        <textarea id="teamInput" rows="12" placeholder="Enter exactly 20 team names, one per line…"></textarea>
+
+        <div class="btn-row">
+            <button id="loadDefaultTeamsButton" class="btn-secondary">
+                <i class="fa-solid fa-list"></i> Load Default Teams
+            </button>
+            <button id="generateTournamentButton">
+                <i class="fa-solid fa-play"></i> Create League
+            </button>
+        </div>
+
+        <div class="btn-row" style="margin-top:10px;">
+            <button id="startKnockoutButton" class="btn-blue">
+                <i class="fa-solid fa-fire"></i> Start Knockout Stage
+            </button>
+            <button id="declareChampionButton" class="btn-gold">
+                <i class="fa-solid fa-trophy"></i> Declare Champion
+            </button>
+        </div>
+
+        <div class="btn-row" style="margin-top:10px;">
+            <button id="resetTournamentButton" class="btn-danger">
+                <i class="fa-solid fa-rotate"></i> Reset Tournament
+            </button>
+        </div>
+    </section>
+
+    <!-- ── TOURNAMENT STATISTICS ───────────────────────────────────────── -->
+    <section class="card">
+        <h2><i class="fa-solid fa-chart-bar"></i> Tournament Statistics</h2>
+        <div class="stats">
+            <div class="stat"><h3 id="adminTeamCount">0</h3><p>Teams</p></div>
+            <div class="stat"><h3 id="adminCompletedMatches">0</h3><p>Completed</p></div>
+            <div class="stat"><h3 id="adminTotalMatches">0</h3><p>League Matches</p></div>
+            <div class="stat"><h3 id="adminStage">League</h3><p>Current Stage</p></div>
+            <div class="stat"><h3 id="adminChampion">–</h3><p>Champion</p></div>
+        </div>
+    </section>
+
+    <!-- ── SUBMIT MATCH RESULT ─────────────────────────────────────────── -->
+    <section class="card">
+        <h2><i class="fa-solid fa-pen"></i> Submit / Edit Match Result</h2>
+        <div class="result-form-grid" style="margin-top:15px;">
+            <select id="adminMatchSelect"></select>
+            <input type="number" id="adminScore1" placeholder="Team 1 Score" min="0">
+            <input type="number" id="adminScore2" placeholder="Team 2 Score" min="0">
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <button id="submitResultButton" style="flex:1; min-width:130px;">
+                    <i class="fa-solid fa-check"></i> Submit
+                </button>
+                <button id="clearResultButton" class="btn-danger" style="flex:1; min-width:130px;">
+                    <i class="fa-solid fa-trash"></i> Clear
+                </button>
+            </div>
+        </div>
+
+        <!-- Penalty section – only visible for knockout matches -->
+        <div id="penaltyRow" style="display:none; margin-top:18px; background:#081727; padding:16px; border-radius:12px;">
+            <label style="display:flex; align-items:center; gap:10px; color:#ddd; margin-bottom:14px; cursor:pointer;">
+                <input type="checkbox" id="penaltyToggle" style="width:18px;height:18px;">
+                <span>⚡ Match decided by Penalty Shoot-out (scores level after ET)</span>
+            </label>
+            <select id="penaltyWinnerSelect" style="display:block; width:100%;">
+                <option value="">— Select penalty winner —</option>
+            </select>
+        </div>
+    </section>
+
+    <!-- ── LIVE BRACKET & LEAGUE ───────────────────────────────────────── -->
+    <section class="card">
+        <h2><i class="fa-solid fa-table"></i> Live Bracket &amp; League Table</h2>
+        <div id="adminBracketContent">Loading tournament data…</div>
+    </section>
+
+</div><!-- /#adminContent -->
+
+<script type="module" src="admin.js"></script>
+</body>
+</html>
